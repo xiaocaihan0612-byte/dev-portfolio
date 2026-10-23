@@ -1,0 +1,26 @@
+{
+    "social": [
+        {
+            "network" : "github",
+            "href": "https://github.com/xiaocaihan0612-byte"
+        },
+        {
+            "network" : "email",
+            "href": "https://mail.163.com/",
+            "copy": "xiaocaihan0612@gmail.com",
+            "copyLabel": "收件人已复制，登录 163 后粘贴即可",
+            "label": "邮箱：xiaocaihan0612@gmail.com"
+        },
+        {
+            "network" : "phone",
+            "href": "tel:+8615006225666",
+            "label": "联系电话：15006225666"
+        },
+        {
+            "network" : "wechat",
+            "copy": "xcq170525",
+            "copyLabel": "微信号已复制",
+            "label": "微信号：xcq170525"
+        }
+    ]
+}

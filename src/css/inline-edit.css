@@ -1,0 +1,178 @@
+/* ============ 就地编辑（教育经历 / 工作经历） ============ */
+
+/* 标题 + 编辑按钮：标题保持居中，按钮绝对定位在右上角 */
+.section-head {
+  position: relative;
+}
+.btn-edit {
+  position: absolute;
+  right: 0;
+  top: var(--space-7);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 7px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+.btn-edit:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ---- 密码弹窗 ---- */
+.pm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+.pm-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 26px;
+  border-radius: var(--radius-md);
+  width: 340px;
+  max-width: 92vw;
+  box-shadow: var(--shadow-md);
+}
+.pm-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.15rem;
+}
+.pm-tip {
+  margin: 0 0 14px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.pm-card input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+}
+.pm-card input:focus {
+  border-color: var(--accent);
+}
+.pm-error {
+  color: #d64545;
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+.pm-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* ---- 编辑表单 ---- */
+.ie {
+  padding: 4px 0 20px;
+}
+.ie-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.ie-item__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.ie-field {
+  margin-bottom: 14px;
+}
+.ie-field:last-child {
+  margin-bottom: 0;
+}
+.ie-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.ie-field input,
+.ie-field textarea {
+  width: 100%;
+  padding: 10px 13px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  line-height: 1.5;
+  outline: none;
+  resize: vertical;
+}
+.ie-field input:focus,
+.ie-field textarea:focus {
+  border-color: var(--accent);
+}
+.ie-list__row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: flex-start;
+}
+.ie-list__row textarea {
+  flex: 1;
+}
+.ie-del {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(214, 69, 69, 0.45);
+  color: #d64545;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 5px 12px;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+.ie-del:hover {
+  background: rgba(214, 69, 69, 0.1);
+}
+.ie-add,
+.ie-add-item {
+  background: transparent;
+  border: 1px dashed var(--accent);
+  color: var(--accent);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 7px 14px;
+  font-size: 0.88rem;
+}
+.ie-add:hover,
+.ie-add-item:hover {
+  background: var(--accent-soft);
+}
+.ie-add-item {
+  display: block;
+  width: 100%;
+  margin-bottom: 16px;
+}
+.ie-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}

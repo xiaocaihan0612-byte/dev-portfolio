@@ -1,0 +1,19 @@
+{
+    "education":[
+        {
+            "title": "20XX 年 6 月 - 20YY 年 6 月",
+            "cardTitle": "计算机科学与技术 学士",
+            "cardSubtitle":"某某大学",
+            "cardDetailedText": "平均绩点 - 9.5",
+            "icon" : {
+                "src": "images/education/lorem-ipsum.png"
+            }
+        },
+        {
+            "title": "20XX 年 4 月",
+            "cardTitle": "高中",
+            "cardSubtitle":"某某中学",
+            "cardDetailedText": "成绩 - 95%"
+        }
+    ]
+}

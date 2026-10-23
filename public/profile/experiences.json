@@ -1,0 +1,33 @@
+{
+    "experiences": [
+        {
+            "title": "软件工程师",
+            "subtitle": "某某有限公司",
+            "workType": "全职",
+            "workDescription": [
+                "整合了 **2** 个新产品。",
+                "负责将 **def** 接入 **bcd**，速度提升了 50%。"
+            ],
+            "dateText": "20XX 年 6 月 – 至今"
+        },
+        {
+            "title": "软件工程师",
+            "subtitle": "某某有限公司",
+            "workType": "实习",
+            "workDescription": [
+                "负责 abc 相关工作。"
+            ],
+            "dateText": "20XX 年 1 月 – 20XX 年 5 月"
+        },
+        {
+            "title": "应用开发者",
+            "subtitle": "某某私有有限公司",
+            "workType": "自由职业",
+            "workDescription": [
+                "使用混合框架为初创公司开发 Android 和 iOS 双端官方应用。",
+                "完成 bcd 相关工作。"
+            ],
+            "dateText": "20XX 年 9 月 – 20YY 年 1 月"
+        }
+    ]
+}
