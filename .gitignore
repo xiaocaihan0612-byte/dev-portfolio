@@ -24,3 +24,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .workbuddy/
+
+# 部署临时包
+portfolio-build.tar.gz
