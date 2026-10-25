@@ -1,0 +1,3 @@
+# 保证 shell / 配置脚本在 Linux 上以 LF 换行（否则在服务器上执行会报 $'\r' 错误）
+*.sh   text eol=lf
+*.conf text eol=lf
