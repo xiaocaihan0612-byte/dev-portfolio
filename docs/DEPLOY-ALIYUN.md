@@ -23,19 +23,22 @@
 
 ## 第 1 步：登录服务器
 
+**本实例的登录用户是 `admin`（不是 root）**，提示符形如 `admin@...:~$`，所有需要管理员权限的命令前面要加 `sudo`。
+
 两种方式任选：
 
-**方式 A（推荐，图形化）**：控制台点「远程连接」→ Workbench 网页终端，自动是 root 身份，无需密码。
+**方式 A（图形化，已可用）**：控制台点「远程连接」→ Workbench 网页终端，浏览器里直接进入 `admin` 会话，无需密码。
 
-**方式 B（本地终端）**：在项目目录打开 Git Bash：
+**方式 B（本地终端，上传文件必须用这个）**：在项目目录打开 Git Bash：
 
 ```bash
-ssh root@47.93.0.203
+ssh admin@47.93.0.203
 # 首次会提示 The authenticity of host ... are you sure? 输入 yes 回车
-# 然后输入 root 密码（输入时屏幕不显示，是正常现象）
+# 然后输入 admin 的密码（输入时屏幕不显示，是正常现象）
 ```
 
-登录成功后提示符会变成 `root@Ubuntu-gjjx:~#`。
+> 如果不知道 admin 的密码：控制台 →「重置密码」可以重置。若重置的是 root 密码而 admin 仍无法登录，
+> 在网页终端里执行 `sudo passwd admin` 直接给 admin 设一个密码，之后就能用方式 B 登录了。
 
 ---
 
@@ -44,17 +47,18 @@ ssh root@47.93.0.203
 逐段复制执行：
 
 ```bash
-# 更新软件源
-apt update
+# 更新软件源（登录用户是 admin，需加 sudo）
+sudo apt update
 
 # 安装 Nginx（Ubuntu 24.04 自带 1.24）
-apt install -y nginx
+sudo apt install -y nginx
 
-# 创建站点目录
-mkdir -p /var/www/portfolio
+# 创建站点目录，并把属主交给 admin，方便后续上传
+sudo mkdir -p /var/www/portfolio
+sudo chown -R admin:admin /var/www/portfolio
 
 # 确认 nginx 已启动
-systemctl enable --now nginx
+sudo systemctl enable --now nginx
 systemctl status nginx --no-pager
 ```
 
@@ -74,7 +78,7 @@ bash deploy/deploy.sh
 ```
 
 脚本会依次做：构建 → 打包 → `scp` 上传 → 服务器解包 → `nginx -t` 校验 → reload。
-中途会让输入 root 密码，输入一次即可。
+中途会让你输入 **admin 的密码**；若 sudo 也需要密码，还会再问一次。
 
 <details>
 <summary>如果你想手动一步步来（或脚本报错时兜底）</summary>
@@ -88,13 +92,28 @@ npm run build
 tar -czf portfolio-build.tar.gz -C build .
 
 # 3) 上传（会把文件放到服务器 /tmp）
-scp portfolio-build.tar.gz root@47.93.0.203:/tmp/
+scp portfolio-build.tar.gz admin@47.93.0.203:/tmp/
 
-# 4) 回到服务器终端，解包
-mkdir -p /var/www/portfolio
-tar -xzf /tmp/portfolio-build.tar.gz -C /var/www/portfolio
-chown -R www-data:www-data /var/www/portfolio
+# 4) 回到服务器终端，解包（注意 sudo）
+sudo mkdir -p /var/www/portfolio
+sudo tar -xzf /tmp/portfolio-build.tar.gz -C /var/www/portfolio
+sudo chown -R www-data:www-data /var/www/portfolio
 rm -f /tmp/portfolio-build.tar.gz
+```
+</details>
+
+<details>
+<summary>如果本地 ssh/scp 连不上服务器（备选：用网页终端传文件）</summary>
+
+1. 本地先执行 `npm run build` 和 `tar -czf portfolio-build.tar.gz -C build .`
+2. 网页终端左上角「菜单」→ **文件** → 上传文件，把 `portfolio-build.tar.gz` 传到服务器的 `~` 目录
+3. 网页终端里执行：
+
+```bash
+sudo mkdir -p /var/www/portfolio
+sudo tar -xzf ~/portfolio-build.tar.gz -C /var/www/portfolio
+sudo chown -R www-data:www-data /var/www/portfolio
+rm -f ~/portfolio-build.tar.gz
 ```
 </details>
 
@@ -105,8 +124,8 @@ rm -f /tmp/portfolio-build.tar.gz
 **在服务器终端**执行：
 
 ```bash
-# 写入站点配置（内容就是项目里的 deploy/nginx-portfolio.conf）
-cat > /etc/nginx/sites-available/portfolio <<'EOF'
+# 写入站点配置（内容就是项目里的 deploy/nginx-portfolio.conf，用 tee 因为要 sudo）
+sudo tee /etc/nginx/sites-available/portfolio > /dev/null <<'EOF'
 server {
     listen 80;
     listen [::]:80;
@@ -149,12 +168,12 @@ server {
 EOF
 
 # 启用站点，并禁用默认站点（否则默认页会抢占根路径）
-ln -sf /etc/nginx/sites-available/portfolio /etc/nginx/sites-enabled/portfolio
-rm -f /etc/nginx/sites-enabled/default
+sudo ln -sf /etc/nginx/sites-available/portfolio /etc/nginx/sites-enabled/portfolio
+sudo rm -f /etc/nginx/sites-enabled/default
 
 # 校验配置并重载
-nginx -t
-systemctl reload nginx
+sudo nginx -t
+sudo systemctl reload nginx
 ```
 
 关键点：`try_files $uri $uri/ /index.html` 是给 **BrowserRouter** 用的——你的站用了前端路由（`/edit` 等），没有这行，直接访问或刷新 `/edit` 会 404。
@@ -182,7 +201,7 @@ curl -s http://127.0.0.1 | head   # 期望看到你的 index.html
 ## 第 6 步：把代码推到 GitHub（之前失败的原因）
 
 之前推不上去，是因为 **GitHub 不再接受账号密码，HTTPS 推送需要 Personal Access Token**，而本机凭据里没有。
-（你的本地仓库其实已经提交好了 2 个 commit，只差这一步推送。）
+（你的本地仓库其实已经提交好了 4 个 commit，只差这一步推送。）
 
 在项目根目录 Git Bash 执行：
 
