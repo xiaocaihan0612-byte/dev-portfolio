@@ -11,13 +11,15 @@ import { lightTheme, darkTheme } from './theme/themes';
 
 function App() {
   const darkMode = useDarkMode(true);
+  // GitHub Pages 部署在 /dev-portfolio/ 子路径下，路由需要带上同样的前缀
+  const routerBase = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
 
   return (
     <AppContext.Provider value={{ darkMode }}>
       <ThemeProvider theme={darkMode.value ? darkTheme : lightTheme}>
         <GlobalStyles />
         <div className="App">
-          <BrowserRouter>
+          <BrowserRouter basename={routerBase}>
             <MainApp />
           </BrowserRouter>
         </div>
